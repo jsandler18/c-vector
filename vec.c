@@ -93,6 +93,9 @@ int remove_index(vec_t * vector, int idx) {
     return VEC_SUCCESS;
 }
 int remove_element(vec_t * vector, void * element_ptr) {
+    if (element_ptr == NULL) 
+        return VEC_NULL_BUFFER;
+
     for (int i = 0; i < vector->used_slots; i++) {
         if (memcmp(vector->array + i * vector->element_size, element_ptr, vector->element_size) == 0) {
             return remove_index(vector, i);
@@ -100,5 +103,23 @@ int remove_element(vec_t * vector, void * element_ptr) {
     }
     return VEC_NOT_FOUND;
 }
-int get(vec_t * vector, int idx, void * element_buffer);
-int destroy(vec_t * vector);
+int get(vec_t * vector, int idx, void * element_buffer) {
+    if (element_buffer == NULL) 
+        return VEC_NULL_BUFFER;
+
+    //check bounds
+    if (!(idx >=0 && idx < vector->used_slots)) 
+        return VEC_INDEX_OUT_OF_BOUNDS;
+
+    memcpy(element_buffer, vector->array + idx * vector->element_size, vector->element_size);
+
+    return VEC_SUCCESS;
+}
+int destroy(vec_t * vector) {
+    if (vector->array == NULL)
+        return VEC_ALREADY_DESTROYED;
+
+    free(vector->array);
+
+    return VEC_SUCCESS;
+}

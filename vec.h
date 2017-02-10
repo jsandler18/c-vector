@@ -8,9 +8,9 @@
 #define VEC_NOT_FOUND 3
 #define VEC_ALREADY_INITIALIZED 4
 #define VEC_ALREADY_DESTROYED 5
+#define VEC_NULL_BUFFER 6
 
-#include <types.h>
-#include <stdlib.h>
+#include <stdint.h>
 
 typedef struct {
     uint32_t allocated_slots;
@@ -22,7 +22,8 @@ typedef struct {
 /**
  * given a pointer to a vec_t struct, and the size of
  * the elements that will be stored in the vector,
- * initializes the vector with some memory.
+ * initializes the vector with some memory. vector must
+ * have been zeroed out first, or may trigger already initialized error
  *
  * possible return values:
  *  VEC_SUCCESS
@@ -67,6 +68,7 @@ int veclen(vec_t * vector);
  * possible return values:
  *  VEC_SUCCESS
  *  VEC_COULD_NOT_ALLOCATE_MEMORY
+ *  VEC_NULL_BUFFER
  *  VEC_NOT_FOUND
  */
 int remove_element(vec_t * vector, void * element_ptr);
@@ -90,6 +92,7 @@ int remove_index(vec_t * vector, int idx);
  * possible return values:
  *  VEC_SUCCESS
  *  VEC_INDEX_OUT_OF_BOUNDS
+ *  VEC_NULL_BUFFER
  */
 int get(vec_t * vector, int idx, void * element_buffer);
 
