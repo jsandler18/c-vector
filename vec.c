@@ -28,12 +28,12 @@ int shrink(vec_t * vector) {
 
 int init (vec_t * vector, size_t element_size) {
     vector->element_size = element_size;
-    vector->allocated_slots = MIN_SIZE;
     vector->used_slots = 0;
     //check already initialized
     if (vector->array != NULL && vector->allocated_slots > 0) 
         return VEC_ALREADY_INITIALIZED;
 
+    vector->allocated_slots = MIN_SIZE;
     vector->array = calloc(MIN_SIZE, element_size);
 
     //check memory allocation
@@ -45,7 +45,7 @@ int init (vec_t * vector, size_t element_size) {
 }
 int insert(vec_t * vector, void * element_ptr, int idx) {
     //check that have enough space, grow if necesary
-    if (vector->used_slots == vector->allocated_slots) {
+    if (vector->used_slots == vector->allocated_slots - 1) {
         if (!grow(vector)) 
             return VEC_COULD_NOT_ALLOCATE_MEMORY;
     }
@@ -55,12 +55,15 @@ int insert(vec_t * vector, void * element_ptr, int idx) {
         return VEC_INDEX_OUT_OF_BOUNDS;
     
     //move everything over one
-    memcpy(vector->array + (idx + 1) * vector->element_size,
-            vector->array + (idx) * vector->element_size,
-            (vector->used_slots - idx) * vector->element_size);
-
+    for (int i = vector->used_slots; i > idx; i--) {
+        memcpy(vector->array + (i) * vector->element_size,
+                vector->array + (i - 1) * vector->element_size,
+                vector->element_size);
+    }
     //insert
     memcpy(vector->array + idx * vector->element_size, element_ptr, vector->element_size);
+
+    vector->used_slots++;
 
     return VEC_SUCCESS;
 
@@ -77,9 +80,11 @@ int remove_index(vec_t * vector, int idx) {
         return VEC_INDEX_OUT_OF_BOUNDS;
     
     //move everything over one
-    memcpy(vector->array + (idx) * vector->element_size,
-            vector->array + (idx + 1) * vector->element_size,
-            (vector->used_slots - idx - 1) * vector->element_size);
+    for (int i = idx; i < vector-> used_slots; i++) {
+        memcpy(vector->array + (i) * vector->element_size,
+                vector->array + (i + 1) * vector->element_size,
+                vector->element_size);
+    }
 
     //zero out what was last
     memset(vector->array + (--vector->used_slots) * vector->element_size, 0, vector->element_size);

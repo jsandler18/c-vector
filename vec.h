@@ -11,6 +11,7 @@
 #define VEC_NULL_BUFFER 6
 
 #include <stdint.h>
+#include <stdio.h>
 
 typedef struct {
     uint32_t allocated_slots;
