@@ -68,8 +68,37 @@ int insert(vec_t * vector, void * element_ptr, int idx) {
 int append(vec_t * vector, void * element_ptr) {
     return insert(vector, element_ptr, vector->used_slots);
 }
-int veclen(vec_t * vector);
-int remove_element(vec_t * vector, void * element_ptr);
-int remove_index(vec_t * vector, int idx);
+int veclen(vec_t * vector) {
+    return vector->used_slots;
+}
+int remove_index(vec_t * vector, int idx) {
+    //check bounds
+    if (!(idx >=0 && idx < vector->used_slots)) 
+        return VEC_INDEX_OUT_OF_BOUNDS;
+    
+    //move everything over one
+    memcpy(vector->array + (idx) * vector->element_size,
+            vector->array + (idx + 1) * vector->element_size,
+            (vector->used_slots - idx - 1) * vector->element_size);
+
+    //zero out what was last
+    memset(vector->array + (--vector->used_slots) * vector->element_size, 0, vector->element_size);
+
+    //shrink if now use 1/4 space as allocated
+    if (vector->used_slots < vector->allocated_slots/4) {
+        if (!shrink(vector))
+            return VEC_COULD_NOT_ALLOCATE_MEMORY;
+    }
+
+    return VEC_SUCCESS;
+}
+int remove_element(vec_t * vector, void * element_ptr) {
+    for (int i = 0; i < vector->used_slots; i++) {
+        if (memcmp(vector->array + i * vector->element_size, element_ptr, vector->element_size) == 0) {
+            return remove_index(vector, i);
+        }
+    }
+    return VEC_NOT_FOUND;
+}
 int get(vec_t * vector, int idx, void * element_buffer);
 int destroy(vec_t * vector);
