@@ -46,7 +46,7 @@ int init (vec_t * vector, size_t element_size) {
 int insert(vec_t * vector, void * element_ptr, int idx) {
     //check that have enough space, grow if necesary
     if (vector->used_slots == vector->allocated_slots - 1) {
-        if (!grow(vector)) 
+        if (grow(vector)) 
             return VEC_COULD_NOT_ALLOCATE_MEMORY;
     }
 
@@ -90,7 +90,7 @@ int remove_index(vec_t * vector, int idx) {
     memset(vector->array + (--vector->used_slots) * vector->element_size, 0, vector->element_size);
 
     //shrink if now use 1/4 space as allocated
-    if (vector->used_slots < vector->allocated_slots/4) {
+    if (vector->used_slots < vector->allocated_slots/4 && vector->allocated_slots > MIN_SIZE) {
         if (!shrink(vector))
             return VEC_COULD_NOT_ALLOCATE_MEMORY;
     }
