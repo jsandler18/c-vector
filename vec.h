@@ -20,6 +20,8 @@ typedef struct {
     void * array;
 } vec_t;
 
+typedef int (*cmpfn)(const void*,const void*);
+
 /**
  * given a pointer to a vec_t struct, and the size of
  * the elements that will be stored in the vector,
@@ -105,4 +107,12 @@ int get(vec_t * vector, int idx, void * element_buffer);
  *  VEC_ALREADY_DESTROYED
  */
 int destroy(vec_t * vector);
+
+/**
+ * sorts the array in place. Always succeeds.
+ *
+ * possible return values:
+ *  VEC_SUCCESS
+ */
+int sort(vec_t * vector,cmpfn cmp);
 #endif

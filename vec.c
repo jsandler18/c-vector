@@ -128,3 +128,7 @@ int destroy(vec_t * vector) {
 
     return VEC_SUCCESS;
 }
+int sort(vec_t * vector, cmpfn cmp) {
+    qsort(vector->array,vector->used_slots, vector->element_size,cmp);
+    return VEC_SUCCESS;
+}
