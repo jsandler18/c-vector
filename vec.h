@@ -12,6 +12,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <string.h>
 
 typedef struct {
     uint32_t allocated_slots;
@@ -115,4 +116,57 @@ int destroy(vec_t * vector);
  *  VEC_SUCCESS
  */
 int sort(vec_t * vector,cmpfn cmp);
+
+
+/**
+ * finds the element in the vector based on the given condition.
+ * vector is a vec_t *. element_buffer is a x*, where x is the type that 
+ * you are storing.  condition is a boolean expression involving your element_buffer.
+ *
+ * Example:
+ *      struct x {
+ *          int y;
+ *          int z;
+ *      }
+ *      
+ *      struct x buf;
+ *      FIND_BY(vector, &buf, buf.y == 1)
+ *
+ * possible results:
+ *  VEC_SUCCESS
+ *  VEC_NOT_FOUND
+ */
+#define FIND_BY(vector, element_buffer, condition) ({\
+    int _ret = VEC_NOT_FOUND; \
+    for (int _i = 0; _i < (vector)->used_slots; _i++) { \
+        memcpy(element_buffer, (vector)->array + _i * (vector)->element_size, (vector)->element_size); \
+        if (condition) { \
+            _ret = VEC_SUCCESS; \
+            break; \
+        } \
+    } \
+    _ret; \
+})
+
+/**
+ * finds the element in the vector based on the given condition and removes it.
+ * vector is a vec_t *. element_buffer is a x*, where x is the type that 
+ * you are storing.  condition is a boolean expression involving your element_buffer.
+ *
+ * possible results:
+ *  VEC_SUCCESS
+ *  VEC_NOT_FOUND
+ */
+#define REMOVE_BY(vector, element_buffer, condition) ({\
+    int _ret = VEC_NOT_FOUND; \
+    for (int _i = 0; _i < (vector)->used_slots; _i++) { \
+        memcpy(element_buffer, (vector)->array + _i * (vector)->element_size, (vector)->element_size); \
+        if (condition) { \
+            _ret = VEC_SUCCESS; \
+            remove_index(vector, _i); \
+            break; \
+        } \
+    } \
+    _ret; \
+})
 #endif
