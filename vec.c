@@ -27,11 +27,12 @@ int shrink(vec_t * vector) {
 }
 
 int init (vec_t * vector, size_t element_size) {
-    vector->element_size = element_size;
-    vector->used_slots = 0;
     //check already initialized
     if (vector->array != NULL && vector->allocated_slots > 0) 
         return VEC_ALREADY_INITIALIZED;
+
+    vector->element_size = element_size;
+    vector->used_slots = 0;
 
     vector->allocated_slots = MIN_SIZE;
     vector->array = calloc(MIN_SIZE, element_size);
@@ -132,3 +133,24 @@ int sort(vec_t * vector, cmpfn cmp) {
     qsort(vector->array,vector->used_slots, vector->element_size,cmp);
     return VEC_SUCCESS;
 }
+
+int copy(vec_t * srcvec, vec_t * dstvec) {
+    //check already initialized
+    if (dstvec->array != NULL && dstvec->allocated_slots > 0) 
+        return VEC_ALREADY_INITIALIZED;
+
+    dstvec->element_size = srcvec->element_size;
+    dstvec->used_slots = srcvec->used_slots;
+    dstvec->allocated_slots = srcvec->allocated_slots;
+    dstvec->array = calloc(srcvec->allocated_slots, srcvec->element_size);
+
+    //check memory allocation
+    if (dstvec->array == NULL) 
+        return VEC_COULD_NOT_ALLOCATE_MEMORY;
+    
+    memcpy(dstvec->array, srcvec->array, srcvec->allocated_slots * srcvec->element_size);
+
+    //everything is good
+    return VEC_SUCCESS;
+}
+

@@ -117,6 +117,19 @@ int destroy(vec_t * vector);
  */
 int sort(vec_t * vector,cmpfn cmp);
 
+/**
+ * creates a copy of the vector. The source vector should have already been
+ * initialized, while the destination vector should already be allocated but
+ * not initalized
+ *
+ * possible return values:
+ *  VEC_SUCCESS
+ *  VEC_COULD_NOT_ALLOCATE_MEMORY
+ *  VEC_ALREADY_INITIALIZED
+ *
+ */
+int copy(vec_t * srcvec, vec_t * dstvec);
+
 
 /**
  * finds the element in the vector based on the given condition.
@@ -169,4 +182,5 @@ int sort(vec_t * vector,cmpfn cmp);
     } \
     _ret; \
 })
+
 #endif
