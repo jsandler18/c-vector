@@ -126,6 +126,7 @@ int destroy(vec_t * vector) {
         return VEC_ALREADY_DESTROYED;
 
     free(vector->array);
+    bzero(vector, sizeof(vec_t));
 
     return VEC_SUCCESS;
 }
