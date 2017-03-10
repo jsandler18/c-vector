@@ -143,13 +143,13 @@ int copy(vec_t * srcvec, vec_t * dstvec);
  *      }
  *      
  *      struct x buf;
- *      FIND_BY(vector, &buf, buf.y == 1)
+ *      VEC_FIND_BY(vector, &buf, buf.y == 1)
  *
  * possible results:
  *  VEC_SUCCESS
  *  VEC_NOT_FOUND
  */
-#define FIND_BY(vector, element_buffer, condition) ({\
+#define VEC_FIND_BY(vector, element_buffer, condition) ({\
     int _ret = VEC_NOT_FOUND; \
     for (int _i = 0; _i < (vector)->used_slots; _i++) { \
         memcpy(element_buffer, (vector)->array + _i * (vector)->element_size, (vector)->element_size); \
@@ -170,7 +170,7 @@ int copy(vec_t * srcvec, vec_t * dstvec);
  *  VEC_SUCCESS
  *  VEC_NOT_FOUND
  */
-#define REMOVE_BY(vector, element_buffer, condition) ({\
+#define VEC_REMOVE_BY(vector, element_buffer, condition) ({\
     int _ret = VEC_NOT_FOUND; \
     for (int _i = 0; _i < (vector)->used_slots; _i++) { \
         memcpy(element_buffer, (vector)->array + _i * (vector)->element_size, (vector)->element_size); \
@@ -181,6 +181,28 @@ int copy(vec_t * srcvec, vec_t * dstvec);
         } \
     } \
     _ret; \
+})
+
+/**
+ * creates a copy of the first vector and stores it in the second vector.
+ * The copy keeps only the elements that satisfy the condition.
+ * srcvector is an initialized vec_t * , dstvector is an uninitailized vec_t *. 
+ * element_buffer is a x*, where x is the type that you are storing. 
+ * condition is a boolean expression involving your element_buffer.
+ *
+ * possible results:
+ *  VEC_SUCCESS
+ */
+#define VEC_SELECT(srcvector, dstvector, element_buffer, condition) ({\
+    copy(srcvector, dstvector); \
+    for (int _i = 0; _i < (dstvector)->used_slots; _i++) {\
+        memcpy(element_buffer, (dstvector)->array + _i * (dstvector)->element_size, (dstvector)->element_size); \
+        if (!(condition)) { \
+            remove_index(dstvector, _i); \
+            _i--;\
+        }\
+    }\
+    VEC_SUCCESS;\
 })
 
 #endif
