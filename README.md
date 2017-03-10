@@ -1,5 +1,6 @@
 # c-vector
-I wrote this for school projects. Feel free to use it
+I wrote this for use in my school projects. A dynamic C vector is a nice thing to have in your back pocket if you need it.
+Feel free to use it
 
 # Functions
 
