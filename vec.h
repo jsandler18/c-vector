@@ -194,8 +194,9 @@ int copy(vec_t * srcvec, vec_t * dstvec);
  *  VEC_SUCCESS
  */
 #define VEC_SELECT(srcvector, dstvector, element_buffer, condition) ({\
+        int _i;\
         copy(srcvector, dstvector); \
-        for (int _i = 0; _i < (dstvector)->used_slots; _i++) {\
+        for (_i = 0; _i < (dstvector)->used_slots; _i++) {\
             memcpy(element_buffer, (dstvector)->array + _i * (dstvector)->element_size, (dstvector)->element_size); \
             if (!(condition)) { \
                 remove_index(dstvector, _i); \
@@ -215,7 +216,8 @@ int copy(vec_t * srcvec, vec_t * dstvec);
  *  VEC_SUCCESS
  */
 #define VEC_FILTER(vector, element_buffer, condition) ({\
-        for (int _i = 0; _i < (vector)->used_slots; _i++) {\
+        int _i;\
+        for (_i = 0; _i < (vector)->used_slots; _i++) {\
             memcpy(element_buffer, (vector)->array + _i * (vector)->element_size, (vector)->element_size); \
             if (!(condition)) { \
                 remove_index(vector, _i); \
@@ -255,6 +257,7 @@ int copy(vec_t * srcvec, vec_t * dstvec);
  */
 #define VEC_MAP(srcvector, dstvector, mapped_ele_size, src_element_buffer, dst_element_buffer, expression) ({\
         int _ret = VEC_SUCCESS; \
+        int _i;\
         if ((dstvector)->array != NULL && (dstvector)->allocated_slots > 0)  \
             _ret = VEC_ALREADY_INITIALIZED; \
         else {\
@@ -265,7 +268,7 @@ int copy(vec_t * srcvec, vec_t * dstvec);
             if ((dstvector)->array == NULL) \
                 _ret = VEC_COULD_NOT_ALLOCATE_MEMORY; \
             else { \
-                for (int _i = 0; _i < (srcvector)->used_slots; _i++) {\
+                for (_i = 0; _i < (srcvector)->used_slots; _i++) {\
                     memcpy(src_element_buffer, (srcvector)->array + _i * (srcvector)->element_size, (srcvector)->element_size); \
                     expression\
                     memcpy((dstvector)->array + _i * (dstvector)->element_size, dst_element_buffer, (dstvector)->element_size); \
