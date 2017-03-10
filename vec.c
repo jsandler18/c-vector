@@ -45,6 +45,7 @@ int init (vec_t * vector, size_t element_size) {
     return VEC_SUCCESS;
 }
 int insert(vec_t * vector, void * element_ptr, int idx) {
+    int i;
     //check that have enough space, grow if necesary
     if (vector->used_slots == vector->allocated_slots - 1) {
         if (grow(vector)) 
@@ -56,7 +57,7 @@ int insert(vec_t * vector, void * element_ptr, int idx) {
         return VEC_INDEX_OUT_OF_BOUNDS;
     
     //move everything over one
-    for (int i = vector->used_slots; i > idx; i--) {
+    for (i = vector->used_slots; i > idx; i--) {
         memcpy(vector->array + (i) * vector->element_size,
                 vector->array + (i - 1) * vector->element_size,
                 vector->element_size);
@@ -76,12 +77,13 @@ int veclen(vec_t * vector) {
     return vector->used_slots;
 }
 int remove_index(vec_t * vector, int idx) {
+    int i;
     //check bounds
     if (!(idx >=0 && idx < vector->used_slots)) 
         return VEC_INDEX_OUT_OF_BOUNDS;
     
     //move everything over one
-    for (int i = idx; i < vector-> used_slots; i++) {
+    for (i = idx; i < vector-> used_slots; i++) {
         memcpy(vector->array + (i) * vector->element_size,
                 vector->array + (i + 1) * vector->element_size,
                 vector->element_size);
@@ -99,10 +101,11 @@ int remove_index(vec_t * vector, int idx) {
     return VEC_SUCCESS;
 }
 int remove_element(vec_t * vector, void * element_ptr) {
+    int i;
     if (element_ptr == NULL) 
         return VEC_NULL_BUFFER;
 
-    for (int i = 0; i < vector->used_slots; i++) {
+    for (i = 0; i < vector->used_slots; i++) {
         if (memcmp(vector->array + i * vector->element_size, element_ptr, vector->element_size) == 0) {
             return remove_index(vector, i);
         }
