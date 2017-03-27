@@ -53,7 +53,7 @@ int insert(vec_t * vector, void * element_ptr, int idx) {
     }
 
     //check bounds
-    if (!(idx >=0 && idx <= vector->used_slots)) 
+    if (!(idx >=0 && (size_t)idx <= vector->used_slots)) 
         return VEC_INDEX_OUT_OF_BOUNDS;
     
     //move everything over one
@@ -79,11 +79,11 @@ int veclen(vec_t * vector) {
 int remove_index(vec_t * vector, int idx) {
     int i;
     //check bounds
-    if (!(idx >=0 && idx < vector->used_slots)) 
+    if (!(idx >=0 && (size_t)idx < vector->used_slots)) 
         return VEC_INDEX_OUT_OF_BOUNDS;
     
     //move everything over one
-    for (i = idx; i < vector-> used_slots; i++) {
+    for (i = idx; (size_t)i < vector-> used_slots; i++) {
         memcpy(vector->array + (i) * vector->element_size,
                 vector->array + (i + 1) * vector->element_size,
                 vector->element_size);
@@ -105,7 +105,7 @@ int remove_element(vec_t * vector, void * element_ptr) {
     if (element_ptr == NULL) 
         return VEC_NULL_BUFFER;
 
-    for (i = 0; i < vector->used_slots; i++) {
+    for (i = 0; (size_t)i < vector->used_slots; i++) {
         if (memcmp(vector->array + i * vector->element_size, element_ptr, vector->element_size) == 0) {
             return remove_index(vector, i);
         }
@@ -117,7 +117,7 @@ int get(vec_t * vector, int idx, void * element_buffer) {
         return VEC_NULL_BUFFER;
 
     //check bounds
-    if (!(idx >=0 && idx < vector->used_slots)) 
+    if (!(idx >=0 && (size_t)idx < vector->used_slots)) 
         return VEC_INDEX_OUT_OF_BOUNDS;
 
     memcpy(element_buffer, vector->array + idx * vector->element_size, vector->element_size);
@@ -129,7 +129,7 @@ int destroy(vec_t * vector) {
         return VEC_ALREADY_DESTROYED;
 
     free(vector->array);
-    bzero(vector, sizeof(vec_t));
+    memset(vector, 0,sizeof(vec_t));
 
     return VEC_SUCCESS;
 }
