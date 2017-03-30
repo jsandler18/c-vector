@@ -130,6 +130,17 @@ int sort(vec_t * vector,cmpfn cmp);
  */
 int copy(vec_t * srcvec, vec_t * dstvec);
 
+/**
+ * creates a copy of the vector's internal array, and sets resultptr to be the location 
+ * of the pointer to the array.  The allocated space is just a regular dynamic array and
+ * should be freed using free(*resultptr) when done.
+ *
+ * possible return values:
+ *  VEC_SUCCESS
+ *  VEC_COULD_NOT_ALLOCATE_MEMORY
+ */
+int to_array(vec_t * vec, void ** resultptr);
+
 
 /**
  * finds the element in the vector based on the given condition.

@@ -100,6 +100,17 @@ not initalized.
   * VEC_COULD_NOT_ALLOCATE_MEMORY
   * VEC_ALREADY_INITIALIZED
 
+
+### int to_array(vec_t * vec, void ** resultptr)
+
+Creates a copy of the vector's internal array, and sets resultptr to be the location 
+of the pointer to the array.  The allocated space is just a regular dynamic array and
+should be freed using free(*resultptr) when done.
+
+#### Possible return values:
+  * VEC_SUCCESS
+  * VEC_COULD_NOT_ALLOCATE_MEMORY
+
 # Macros
 
 ### VEC_FIND_BY(vector, element_buffer, condition)

@@ -158,3 +158,14 @@ int copy(vec_t * srcvec, vec_t * dstvec) {
     return VEC_SUCCESS;
 }
 
+int to_array(vec_t * vec, void ** resultptr) {
+    void * result = calloc(vec->used_slots, vec->element_size);
+    if (!result)
+        return VEC_COULD_NOT_ALLOCATE_MEMORY;
+
+    memcpy(result, vec->array, vec->used_slots * vec->element_size);
+
+    *resultptr = result;
+
+    return VEC_SUCCESS;
+}
