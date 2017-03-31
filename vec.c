@@ -70,6 +70,18 @@ int insert(vec_t * vector, void * element_ptr, int idx) {
     return VEC_SUCCESS;
 
 }
+
+int replace(vec_t * vector, void * element_ptr, int idx) {
+    //check bounds
+    if (!(idx >=0 && (size_t)idx <= vector->used_slots)) 
+        return VEC_INDEX_OUT_OF_BOUNDS;
+
+    //overwrite the other thing
+    memcpy(vector->array + idx * vector->element_size, element_ptr, vector->element_size);
+    return VEC_SUCCESS;
+
+}
+
 int append(vec_t * vector, void * element_ptr) {
     return insert(vector, element_ptr, vector->used_slots);
 }

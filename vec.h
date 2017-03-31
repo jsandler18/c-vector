@@ -59,6 +59,16 @@ int append(vec_t * vector, void * element_ptr);
 int insert(vec_t * vector, void * element_ptr, int idx);
 
 /**
+ * overwrites the item at the given index with the contents of the
+ * element_ptr buffer. Be sure to not leak memory when using this!
+ *
+ * possible return values:
+ *  VEC_SUCCESS
+ *  VEC_INDEX_OUT_OF_BOUNDS
+ */
+int replace(vec_t * vector, void * element_ptr, int idx);
+
+/**
  * returns the current length of the vector
  */
 int veclen(vec_t * vector);
