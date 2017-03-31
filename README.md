@@ -30,7 +30,7 @@ Appends a copy of the contents pointed to by element_ptr to the end of the vecto
 Inserts a copy of the contents pointed to by the element_ptr into the vector at
 the given index.  This operation shifts everything else over to make room for the new element.
 
-####Possible return values:
+#### Possible return values:
 
   * VEC_SUCCESS
   * VEC_COULD_NOT_ALLOCATE_MEMORY
