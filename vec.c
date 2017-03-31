@@ -73,7 +73,7 @@ int insert(vec_t * vector, void * element_ptr, int idx) {
 
 int replace(vec_t * vector, void * element_ptr, int idx) {
     //check bounds
-    if (!(idx >=0 && (size_t)idx <= vector->used_slots)) 
+    if (!(idx >=0 && (size_t)idx < vector->used_slots)) 
         return VEC_INDEX_OUT_OF_BOUNDS;
 
     //overwrite the other thing
