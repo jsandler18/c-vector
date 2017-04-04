@@ -172,7 +172,8 @@ int to_array(vec_t * vec, void ** resultptr);
  */
 #define VEC_FIND_BY(vector, element_buffer, condition) ({\
         int _ret = VEC_NOT_FOUND; \
-        for (int _i = 0; _i < (vector)->used_slots; _i++) { \
+        unsigned int _i;\
+        for (_i = 0; _i < (vector)->used_slots; _i++) { \
             memcpy(element_buffer, (vector)->array + _i * (vector)->element_size, (vector)->element_size); \
             if (condition) { \
                 _ret = VEC_SUCCESS; \
@@ -193,7 +194,8 @@ int to_array(vec_t * vec, void ** resultptr);
  */
 #define VEC_REMOVE_BY(vector, element_buffer, condition) ({\
         int _ret = VEC_NOT_FOUND; \
-            for (int _i = 0; _i < (vector)->used_slots; _i++) { \
+        unsigned int _i;\
+            for (_i = 0; _i < (vector)->used_slots; _i++) { \
                 memcpy(element_buffer, (vector)->array + _i * (vector)->element_size, (vector)->element_size); \
                 if (condition) { \
                     _ret = VEC_SUCCESS; \
@@ -215,7 +217,7 @@ int to_array(vec_t * vec, void ** resultptr);
  *  VEC_SUCCESS
  */
 #define VEC_SELECT(srcvector, dstvector, element_buffer, condition) ({\
-        int _i;\
+        unsigned int _i;\
         copy(srcvector, dstvector); \
         for (_i = 0; _i < (dstvector)->used_slots; _i++) {\
             memcpy(element_buffer, (dstvector)->array + _i * (dstvector)->element_size, (dstvector)->element_size); \
@@ -237,7 +239,7 @@ int to_array(vec_t * vec, void ** resultptr);
  *  VEC_SUCCESS
  */
 #define VEC_FILTER(vector, element_buffer, condition) ({\
-        int _i;\
+        unsigned int _i;\
         for (_i = 0; _i < (vector)->used_slots; _i++) {\
             memcpy(element_buffer, (vector)->array + _i * (vector)->element_size, (vector)->element_size); \
             if (!(condition)) { \
@@ -278,7 +280,7 @@ int to_array(vec_t * vec, void ** resultptr);
  */
 #define VEC_MAP(srcvector, dstvector, mapped_ele_size, src_element_buffer, dst_element_buffer, expression) ({\
         int _ret = VEC_SUCCESS; \
-        int _i;\
+        unsigned int _i;\
         if ((dstvector)->array != NULL && (dstvector)->allocated_slots > 0)  \
             _ret = VEC_ALREADY_INITIALIZED; \
         else {\
