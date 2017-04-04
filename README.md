@@ -2,6 +2,151 @@
 I wrote this for use in my school projects. A dynamic C vector is a nice thing to have in your back pocket if you need it.
 Feel free to use it
 
+# Basic Usage Examples
+
+### Primative types
+ 
+The following code creates a vector of `int`s, appends 0-499 to it, then inserts 600-798 (skipping odds) 
+starting at index 300, and then removes index 100 for 100 times.  It then prints out all elements in the list, which should 
+come out to 0-99 then 200-299 then 600-798 (evens only) then 300-499.  Notice how every function returns an error code, while the
+actual results are copied into buffers that are pointed to by arguments.
+ 
+```
+#include <stdio.h>
+#include "vec.h"
+
+
+int main() {
+    vec_t vector;
+    int i,j;
+    //doing this prevents init from thinking it already initialized the vector
+    memset(&vector, 0, sizeof(int));
+
+    //init vector and check for success
+    if (init(&vector, sizeof(int)) != VEC_SUCCESS) {
+        fprintf(stderr, "Could not init vector\n");
+        return 1;
+    }
+
+    //add a bunch of elements to the vector, each one gets put at the end
+    for (i = 0; i < 500; i++) {
+        if (append(&vector, &i) != VEC_SUCCESS) {
+            fprintf(stderr, "Could not append element #%d\n", i);
+            //handle error here
+        }
+    }   
+
+    //add a bunch of elements to the middle of the vector, moving everything 
+    //over by one to make space
+    for (i = 300; i < 400; i++) {
+        j = i * 2;
+        if (insert(&vector, &j, i) != VEC_SUCCESS) {
+            fprintf(stderr, "Could not insert element into %d\n", i); 
+            //handle error here
+        }   
+    }   
+
+    //remove some stuff from the middle, shifting everything over to fill the empty space
+    for (i = 100, j = 100; i < 200; i++) {
+        if (remove_index(&vector, j) != VEC_SUCCESS) {
+            fprintf(stderr, "Could not remove element from %d\n", i); 
+            //handle error here
+        }   
+    }   
+
+    //iterate through all vector items and print them
+    for (i = 0; i < veclen(&vector); i++) {
+        //get element at index i and store it in buffer j
+        if (get(&vector, i, &j) == VEC_SUCCESS)
+            printf("%d\n", j);
+        else
+            printf("Couldn't get element %d\n", i);
+    }
+
+    //free the memory allocated by the vector
+    destroy(&vector);
+
+
+    return 0;
+}                                                                         
+```
+
+### Structs
+
+Here is very similar code as above, except using a struct. It works exactly the same.
+```
+#include <stdio.h>
+#include "vec.h"
+
+struct test {
+    int a;
+    short b;
+    long c;
+};
+
+int main() {
+    vec_t vector;
+    int i,j;
+    struct test t;
+    //doing this prevents init from thinking it already initialized the vector
+    memset(&vector, 0, sizeof(int));
+
+    //init vector and check for success
+    if (init(&vector, sizeof(struct test)) != VEC_SUCCESS) {
+        fprintf(stderr, "Could not init vector\n");
+        return 1;
+    }
+
+    //add a bunch of elements to the vector, each one gets put at the end
+    for (i = 0; i < 500; i++) {
+        t.a = i;
+        t.b = i/2;
+        t.c = 20*i;
+        if (append(&vector, &t) != VEC_SUCCESS) {
+            fprintf(stderr, "Could not append element #%d\n", i);
+            //handle error here
+        }
+    }   
+
+    //add a bunch of elements to the middle of the vector, moving everything 
+    //over by one to make space
+    for (i = 300; i < 400; i++) {
+        t.a = i+10000;
+        t.b = i+1000;
+        t.c = 20*(i+1000);
+        if (insert(&vector, &t, i) != VEC_SUCCESS) {
+            fprintf(stderr, "Could not insert element into %d\n", i); 
+            //handle error here
+        }   
+    }   
+
+    //remove some stuff from the middle, shifting everything over to fill the empty space
+    for (i = 100, j = 100; i < 200; i++) {
+        if (remove_index(&vector, j) != VEC_SUCCESS) {
+            fprintf(stderr, "Could not remove element from %d\n", i);
+            //handle error here
+        }
+    }
+
+    //iterate through all vector items and print them
+    for (i = 0; i < veclen(&vector); i++) {
+        //get element at index i and store it in buffer j
+        if (get(&vector, i, &t) == VEC_SUCCESS)
+            printf("%d %d %d\n", t.a, t.b, t.c);
+        else
+            printf("Couldn't get element %d\n", i);
+    }
+
+    //free the memory allocated by the vector
+    destroy(&vector);
+
+
+    return 0;
+}
+
+```
+
+
 # Functions
 
 ### int init (vec_t * vector, size_t element_size)
