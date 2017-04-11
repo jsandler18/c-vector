@@ -352,3 +352,13 @@ The new vector maps all elements from the first.
   * VEC_COULD_NOT_ALLOCATE_MEMORY
   * VEC_ALREADY_INITIALIZED
 
+### VEC_ITER(vector, element_buffer, expression)
+
+Allows you to iterate through the vector more easily. 
+`vector` is a `vec_t *`, `element_buffer` is a `x *`, where `x` is the type being stored.
+expression is any code you choose to execute, that will have the variable `*exlement_buffer`
+availible and filled out with a given element.  `break` will work to end early.
+
+#### Possible Results:
+  * VEC_SUCCESS
+

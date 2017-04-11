@@ -301,3 +301,24 @@ int to_array(vec_t * vec, void ** resultptr);
         _ret;\
 })
 #endif
+
+
+/**
+ * Allows you to iterate through the vector more easily. 
+ * vector is a vec_t *, element_buffer is a x *, where x is the type being stored.
+ * expression is any code you choose to execute, that will have the variable *exlement_buffer
+ * availible and filled out with a given element.  break will work to end early.
+ *
+ * possible results:
+ *  VEC_SUCCESS
+ */
+#define VEC_ITER(vector, element_buffer, expression) ({\
+        int _ret = VEC_SUCCESS;\
+        unsigned int _i;\
+        for (_i = 0; _i < (vector)->used_slots; _i++) {\
+            memcpy(element_buffer, (vector)->array + _i * (vector)->element_size, (vector)->element_size);\
+            expression;\
+        }\
+        _ret;\
+})
+
