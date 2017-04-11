@@ -10,6 +10,7 @@ are as follows:
   * The header file is `svec.h` and the code file is `svec.c`
   * All functions have `sync_` preappended to the front, as in `sync_append` versus the non thread safe `append`
   * Similarly, all macros have `SYNC_` preappended to the front.
+  * obviously, you must link with `-lpthread`
 
 # Basic Usage Examples
 
