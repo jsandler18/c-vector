@@ -1,6 +1,15 @@
 # c-vector
 I wrote this for use in my school projects. A dynamic C vector is a nice thing to have in your back pocket if you need it.
-Feel free to use it
+It also has a thread safe version. It is also Wall clean.
+
+# A Note On The Thread Safe Version
+
+There are two versions of this code, which are very similar.  Documented here is the interface for the non thread safe version, 
+which is found in `vec/`.  The thread safe version is found in `sync_vec` and has an almost identical interface.  The key differences
+are as follows:
+  * The header file is `svec.h` and the code file is `svec.c`
+  * All functions have `sync_` preappended to the front, as in `sync_append` versus the non thread safe `append`
+  * Similarly, all macros have `SYNC_` preappended to the front.
 
 # Basic Usage Examples
 
@@ -70,6 +79,8 @@ int main() {
     return 0;
 }                                                                         
 ```
+
+compile this with `gcc example.c vec.c` or `gcc vec.c -c; gcc example.c vec.o`, or put it in your makefile.  
 
 ### Structs
 
