@@ -318,6 +318,7 @@ int to_array(vec_t * vec, void ** resultptr);
         for (_i = 0; _i < (vector)->used_slots; _i++) {\
             memcpy(element_buffer, (vector)->array + _i * (vector)->element_size, (vector)->element_size);\
             expression;\
+            memcpy((vector)->array + _i * (vector)->element_size, element_buffer,(vector)->element_size);\
         }\
         _ret;\
 })

@@ -336,6 +336,7 @@ int remove_index(sync_vec_t * vector, int idx);
         for (_i = 0; _i < (vector)->used_slots; _i++) {\
             memcpy(element_buffer, (vector)->array + _i * (vector)->element_size, (vector)->element_size);\
             expression;\
+            memcpy((vector)->array + _i * (vector)->element_size, element_buffer,(vector)->element_size);\
         }\
         sem_post(&(vector)->lock);\
         _ret;\
