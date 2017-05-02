@@ -375,3 +375,24 @@ Copies the element buffer back in to reflect any modifications when done.
 #### Possible Results:
   * VEC_SUCCESS
 
+
+### VEC_ITER_REMOVE(vector, element_buffer, expression)
+
+Allows you to iterate through the vector more easily. 
+`vector` is a `vec_t *`, `element_buffer` is a `x *`, where `x` is the type being stored.
+expression is any code you choose to execute, that will have the variable `*exlement_buffer`
+availible and filled out with a given element.  `break` will work to end early.
+If the expression is true, removes the element.  If false, it copies the element buffer back in to reflect any modifications.
+
+#### Possible Results:
+  * VEC_SUCCESS
+
+### VEC_REPLACE_BY(vector, element_buffer, element, expression)
+
+Finds the element in the vector based on the given condition and replaces it with element.
+`vector` is a `vec_t *`. `element_buffer` and `element` are `x*`, where `x` is the type that 
+you are storing.  `condition` is a boolean expression involving your element_buffer.
+
+#### Possible results:
+  * VEC_SUCCESS
+  * VEC_NOT_FOUND
