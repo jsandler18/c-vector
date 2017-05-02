@@ -323,3 +323,53 @@ int to_array(vec_t * vec, void ** resultptr);
         _ret;\
 })
 
+/**
+ * Allows you to iterate through the vector more easily. will also remove the
+ * current element from the vector if the last expression is true, will copy the element buffer
+ * back in if the last expression is false.  This means 
+ * last thing in the expression should be a boolean with no trailing semicolon.
+ * vector is a sync_vec_t *, element_buffer is a x *, where x is the type being stored.
+ * expression is any code you choose to execute, that will have the variable *exlement_buffer
+ * availible and filled out with a given element.  break will work to end early.
+ *
+ * possible results:
+ *  VEC_SUCCESS
+ */
+#define VEC_ITER_REMOVE(vector, element_buffer, expression) ({\
+        int _ret = VEC_SUCCESS;\
+        unsigned int _i;\
+        for (_i = 0; _i < (vector)->used_slots; _i++) {\
+            memcpy(element_buffer, (vector)->array + _i * (vector)->element_size, (vector)->element_size);\
+            if(expression){\
+                remove_index(vector, _i); \
+                _i--;\
+            }\
+            else {\
+                memcpy((vector)->array + _i * (vector)->element_size, element_buffer,(vector)->element_size);\
+            }\
+        }\
+        _ret;\
+})
+
+/**
+ * finds the element in the vector based on the given condition and replaces it with element.
+ * vector is a sync_vec_t *. element_buffer and element are x*, where x is the type that 
+ * you are storing.  condition is a boolean expression involving your element_buffer.
+ *
+ * possible results:
+ *  VEC_SUCCESS
+ *  VEC_NOT_FOUND
+ */
+#define VEC_REPLACE_BY(vector, element_buffer, element, expression) ({\
+        int _ret = VEC_NOT_FOUND; \
+        unsigned int _i;\
+            for (_i = 0; _i < (vector)->used_slots; _i++) { \
+                memcpy(element_buffer, (vector)->array + _i * (vector)->element_size, (vector)->element_size); \
+                if (condition) { \
+                    _ret = VEC_SUCCESS; \
+                    memcpy((vector)->array + _i * (vector)->element_size, element, vector->element_size);\
+                    break; \
+                } \
+        } \
+        _ret; \
+})
