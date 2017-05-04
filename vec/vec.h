@@ -360,14 +360,14 @@ int to_array(vec_t * vec, void ** resultptr);
  *  VEC_SUCCESS
  *  VEC_NOT_FOUND
  */
-#define VEC_REPLACE_BY(vector, element_buffer, element, expression) ({\
+#define VEC_REPLACE_BY(vector, element_buffer, element, condition) ({\
         int _ret = VEC_NOT_FOUND; \
         unsigned int _i;\
             for (_i = 0; _i < (vector)->used_slots; _i++) { \
                 memcpy(element_buffer, (vector)->array + _i * (vector)->element_size, (vector)->element_size); \
                 if (condition) { \
                     _ret = VEC_SUCCESS; \
-                    memcpy((vector)->array + _i * (vector)->element_size, element, vector->element_size);\
+                    memcpy((vector)->array + _i * (vector)->element_size, element, (vector)->element_size);\
                     break; \
                 } \
         } \

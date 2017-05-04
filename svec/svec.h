@@ -343,6 +343,24 @@ int remove_index(sync_vec_t * vector, int idx);
 })
 
 /**
+ * Allows you to iterate through the vector more easily. Does not lock and does not copy modifications.
+ * vector is a sync_vec_t *, element_buffer is a x *, where x is the type being stored.
+ * expression is any code you choose to execute, that will have the variable *exlement_buffer
+ * availible and filled out with a given element.  break will work to end early.
+ *
+ * possible results:
+ *  VEC_SUCCESS
+ */
+#define SYNC_VEC_ITER_READ_ONLY(vector, element_buffer, expression) ({\
+        int _ret = VEC_SUCCESS;\
+        unsigned int _i;\
+        for (_i = 0; _i < (vector)->used_slots; _i++) {\
+            memcpy(element_buffer, (vector)->array + _i * (vector)->element_size, (vector)->element_size);\
+            expression;\
+        }\
+        _ret;\
+})
+/**
  * Allows you to iterate through the vector more easily. will also remove the
  * current element from the vector if the last expression is true.  This means 
  * last thing in the expression should be a boolean with no trailing semicolon.
@@ -380,7 +398,7 @@ int remove_index(sync_vec_t * vector, int idx);
  *  VEC_SUCCESS
  *  VEC_NOT_FOUND
  */
-#define SYNC_VEC_REPLACE_BY(vector, element_buffer, element, expression) ({\
+#define SYNC_VEC_REPLACE_BY(vector, element_buffer, element, condition) ({\
         sem_wait(&(vector)->lock);\
         int _ret = VEC_NOT_FOUND; \
         unsigned int _i;\
@@ -388,7 +406,7 @@ int remove_index(sync_vec_t * vector, int idx);
                 memcpy(element_buffer, (vector)->array + _i * (vector)->element_size, (vector)->element_size); \
                 if (condition) { \
                     _ret = VEC_SUCCESS; \
-                    memcpy((vector)->array + _i * (vector)->element_size, element, vector->element_size);\
+                    memcpy((vector)->array + _i * (vector)->element_size, element, (vector)->element_size); \
                     break; \
                 } \
         } \
