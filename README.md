@@ -375,6 +375,12 @@ Copies the element buffer back in to reflect any modifications when done.
 #### Possible Results:
   * VEC_SUCCESS
 
+#### Note on Syncronized Iteration:
+
+Sometimes it may be necessary to iterate over a syncronized vector, and within the iteration, iterate over it again.
+Using SYNC_VEC_ITER within another will cause a deadlock.  In this case, you should use SYNC_VEC_ITER_READ_ONLY for 
+the inner iteration.  This version does not lock, and also does not copy the results back into the vector.  Non-syncronized 
+vectors do not have this issue, so there is no equivalent macro.
 
 ### VEC_ITER_REMOVE(vector, element_buffer, expression)
 
